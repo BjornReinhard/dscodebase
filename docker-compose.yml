@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  main:
+    container_name: main
+    image: main
+    command: cross-env pm2 start ecosystem.config.js --no-daemon
+    ports:
+      - 5000:5000
+    networks:
+      - nginxnetwork
+  nginx:
+    restart: always
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ${NGINX_CONF}:/etc/nginx/conf.d/default.conf
+      - ./certs:/etc/nginx/certs
+    ports:
+      - 80:80
+    networks:
+      - nginxnetwork
+networks:
+  nginxnetwork:
+    name: nginxnetwork
+    driver: bridge
