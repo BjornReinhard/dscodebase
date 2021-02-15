@@ -12,8 +12,12 @@ nx deploy main-backend
 
 if [ "$machine" == "MinGw" ]; then
   docker-compose stop
+  docker rm nginx
+  docker rm main
 else
   sudo docker-compose stop
+  sudo docker rm nginx
+  sudo docker rm main
 fi
 if [ "$1" == "dev" ]; then
   echo "Docker-compose up for local development"
@@ -23,4 +27,9 @@ else
   conf="./tools/default-prod.conf"
 fi
 
-NGINX_CONF=$conf docker-compose up
+if [ "$machine" == "MinGw" ]; then
+  NGINX_CONF=$conf docker-compose up -d --build
+else
+  NGINX_CONF=$conf sudo docker-compose up -d --build
+fi
+
