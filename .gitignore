@@ -40,3 +40,7 @@ Thumbs.db
 
 # certificates
 /certs
+
+# dotenv environment variables file
+.env
+.env.test
