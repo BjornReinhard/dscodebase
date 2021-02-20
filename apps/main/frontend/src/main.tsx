@@ -6,12 +6,16 @@ import { BrowserRouter } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { normalize } from 'styled-normalize';
 import '@fontsource/fira-sans/latin-400.css';
+import '@fontsource/fira-sans/latin-300.css';
 
 const GlobalStyle = createGlobalStyle`
   ${normalize}
 
   * {
     box-sizing: border-box;
+  }
+  html {
+    overflow-y: auto;
   }
 
   html, body {
@@ -21,7 +25,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background-color: #f5f5f5;
+    background-color: #fefefe;
     color: #4b4b4b;
   }
 

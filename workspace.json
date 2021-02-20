@@ -32,7 +32,9 @@
               "apps/main/frontend/src/favicon.ico",
               "apps/main/frontend/src/assets"
             ],
-            "styles": [],
+            "styles": [
+              "tools/styles/bulma.min.css"
+            ],
             "scripts": [],
             "webpackConfig": "@nrwl/react/plugins/webpack"
           },
