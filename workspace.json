@@ -1,6 +1,8 @@
 {
   "version": 2,
-  "cli": { "defaultCollection": "@nrwl/react" },
+  "cli": {
+    "defaultCollection": "@nrwl/react"
+  },
   "generators": {
     "@nrwl/react": {
       "application": {
@@ -8,87 +10,17 @@
         "linter": "eslint",
         "babel": true
       },
-      "component": { "style": "styled-components" },
-      "library": { "style": "styled-components", "linter": "eslint" }
+      "component": {
+        "style": "styled-components"
+      },
+      "library": {
+        "style": "styled-components",
+        "linter": "eslint"
+      }
     }
   },
   "defaultProject": "main-frontend",
   "projects": {
-    "main-frontend": {
-      "root": "apps/main/frontend",
-      "sourceRoot": "apps/main/frontend/src",
-      "projectType": "application",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/web:build",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/apps/main/frontend",
-            "index": "apps/main/frontend/src/index.html",
-            "main": "apps/main/frontend/src/main.tsx",
-            "polyfills": "apps/main/frontend/src/polyfills.ts",
-            "tsConfig": "apps/main/frontend/tsconfig.app.json",
-            "assets": [
-              "apps/main/frontend/src/favicon.ico",
-              "apps/main/frontend/src/assets"
-            ],
-            "styles": [
-              "tools/styles/bulma.min.css"
-            ],
-            "scripts": [],
-            "webpackConfig": "@nrwl/react/plugins/webpack"
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/main/frontend/src/environments/environment.ts",
-                  "with": "apps/main/frontend/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "executor": "@nrwl/web:dev-server",
-          "options": {
-            "buildTarget": "main-frontend:build",
-            "proxyConfig": "apps/main/frontend/proxy.conf.json"
-          },
-          "configurations": {
-            "production": { "buildTarget": "main-frontend:build:production" }
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/main/frontend/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/main/frontend"],
-          "options": {
-            "jestConfig": "apps/main/frontend/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "main-backend": {
       "root": "apps/main/backend",
       "sourceRoot": "apps/main/backend/src",
@@ -132,11 +64,15 @@
         },
         "serve": {
           "executor": "@nrwl/node:execute",
-          "options": { "buildTarget": "main-backend:build" }
+          "options": {
+            "buildTarget": "main-backend:build"
+          }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["apps/main/backend/**/*.ts"] }
+          "options": {
+            "lintFilePatterns": ["apps/main/backend/**/*.ts"]
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -168,7 +104,84 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["apps/main/e2e/**/*.{js,ts}"] }
+          "options": {
+            "lintFilePatterns": ["apps/main/e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    },
+    "main-frontend": {
+      "root": "apps/main/frontend",
+      "sourceRoot": "apps/main/frontend/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/main/frontend",
+            "index": "apps/main/frontend/src/index.html",
+            "main": "apps/main/frontend/src/main.tsx",
+            "polyfills": "apps/main/frontend/src/polyfills.ts",
+            "tsConfig": "apps/main/frontend/tsconfig.app.json",
+            "assets": [
+              "apps/main/frontend/src/favicon.ico",
+              "apps/main/frontend/src/assets"
+            ],
+            "styles": ["tools/styles/bulma.min.css"],
+            "scripts": [],
+            "webpackConfig": "@nrwl/react/plugins/webpack"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/main/frontend/src/environments/environment.ts",
+                  "with": "apps/main/frontend/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "main-frontend:build",
+            "proxyConfig": "apps/main/frontend/proxy.conf.json"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "main-frontend:build:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/main/frontend/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/main/frontend"],
+          "options": {
+            "jestConfig": "apps/main/frontend/jest.config.js",
+            "passWithNoTests": true
+          }
         }
       }
     }
