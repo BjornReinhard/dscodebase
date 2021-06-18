@@ -1,11 +1,11 @@
 import React from 'react';
 
 import styled from 'styled-components';
+import AngularIcon from './../assets/angular.svg';
+import NodeIcon from './../assets/node-dot-js.svg';
 
 import ReactIcon from './../assets/react.svg';
-import AngularIcon from './../assets/angular.svg';
 import TypescriptIcon from './../assets/typescript.svg';
-import NodeIcon from './../assets/node-dot-js.svg';
 
 const GreenColor = '#5afea4';
 const DeepBlueColor = '#090f29';
@@ -73,6 +73,12 @@ const MenuItem = styled.li`
   }
 `;
 
+const MenuLink = styled.a`
+  &:hover {
+    color: #fff;
+  }
+`;
+
 const StyledCol = styled.div`
   @media (max-width: 425px) {
     height: 50%;
@@ -120,7 +126,7 @@ export function App() {
       </LeftColumn>
       <RightColumn className='is-flex column is-half is-align-items-center'>
         <Menu>
-          <MenuItem>Projects</MenuItem>
+          <MenuItem><MenuLink href='/tweeter'>Projects</MenuLink></MenuItem>
           <MenuItem>Github</MenuItem>
           <MenuItem>LinkedIn</MenuItem>
           <MenuItem>Contact me</MenuItem>
