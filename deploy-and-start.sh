@@ -1,10 +1,12 @@
 #!/bin/bash
 
 nx deploy main-backend
+nx deploy tweeter-backend
 
 docker-compose stop
 docker rm nginx
 docker rm main
+docker rm tweeter
 
 if [ "$1" == "dev" ]; then
   echo "Docker-compose up for local development"

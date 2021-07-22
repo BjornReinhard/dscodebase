@@ -8,6 +8,7 @@
       "application": {
         "style": "styled-components",
         "linter": "eslint",
+        "strict": true,
         "babel": true
       },
       "component": {
@@ -15,7 +16,8 @@
       },
       "library": {
         "style": "styled-components",
-        "linter": "eslint"
+        "linter": "eslint",
+        "strict": true
       }
     }
   },
@@ -40,12 +42,16 @@
         },
         "build": {
           "executor": "@nrwl/node:build",
-          "outputs": ["{options.outputPath}"],
+          "outputs": [
+            "{options.outputPath}"
+          ],
           "options": {
             "outputPath": "dist/apps/main/backend",
             "main": "apps/main/backend/src/main.ts",
             "tsConfig": "apps/main/backend/tsconfig.app.json",
-            "assets": ["apps/main/backend/src/assets"],
+            "assets": [
+              "apps/main/backend/src/assets"
+            ],
             "generatePackageJson": true
           },
           "configurations": {
@@ -71,12 +77,16 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/main/backend/**/*.ts"]
+            "lintFilePatterns": [
+              "apps/main/backend/**/*.ts"
+            ]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/main/backend"],
+          "outputs": [
+            "coverage/apps/main/backend"
+          ],
           "options": {
             "jestConfig": "apps/main/backend/jest.config.js",
             "passWithNoTests": true
@@ -105,7 +115,9 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/main/e2e/**/*.{js,ts}"]
+            "lintFilePatterns": [
+              "apps/main/e2e/**/*.{js,ts}"
+            ]
           }
         }
       }
@@ -117,7 +129,9 @@
       "targets": {
         "build": {
           "executor": "@nrwl/web:build",
-          "outputs": ["{options.outputPath}"],
+          "outputs": [
+            "{options.outputPath}"
+          ],
           "options": {
             "outputPath": "dist/apps/main/frontend",
             "index": "apps/main/frontend/src/index.html",
@@ -128,7 +142,9 @@
               "apps/main/frontend/src/favicon.ico",
               "apps/main/frontend/src/assets"
             ],
-            "styles": ["tools/styles/bulma.min.css"],
+            "styles": [
+              "tools/styles/bulma.min.css"
+            ],
             "scripts": [],
             "webpackConfig": "@nrwl/react/plugins/webpack"
           },
@@ -172,14 +188,171 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/main/frontend/**/*.{ts,tsx,js,jsx}"]
+            "lintFilePatterns": [
+              "apps/main/frontend/**/*.{ts,tsx,js,jsx}"
+            ]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/main/frontend"],
+          "outputs": [
+            "coverage/apps/main/frontend"
+          ],
           "options": {
             "jestConfig": "apps/main/frontend/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "tweeter-backend": {
+      "root": "apps/tweeter/backend",
+      "sourceRoot": "apps/tweeter/backend/src",
+      "projectType": "application",
+      "targets": {
+        "deploy": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "nx build tweeter-frontend --prod",
+              "nx build tweeter-backend --prod",
+              "docker build -f ./apps/tweeter/backend/Dockerfile . -t tweeter"
+            ],
+            "parallel": false
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/tweeter/backend",
+            "main": "apps/tweeter/backend/src/main.ts",
+            "tsConfig": "apps/tweeter/backend/tsconfig.app.json",
+            "assets": ["apps/tweeter/backend/src/assets"],
+            "generatePackageJson": true
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/tweeter/backend/src/environments/environment.ts",
+                  "with": "apps/tweeter/backend/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "tweeter-backend:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/tweeter/backend/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/tweeter/backend"
+          ],
+          "options": {
+            "jestConfig": "apps/tweeter/backend/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "tweeter-frontend": {
+      "root": "apps/tweeter/frontend",
+      "sourceRoot": "apps/tweeter/frontend/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/tweeter/frontend",
+            "index": "apps/tweeter/frontend/src/index.html",
+            "main": "apps/tweeter/frontend/src/main.tsx",
+            "polyfills": "apps/tweeter/frontend/src/polyfills.ts",
+            "tsConfig": "apps/tweeter/frontend/tsconfig.app.json",
+            "assets": [
+              "apps/tweeter/frontend/src/favicon.ico",
+              "apps/tweeter/frontend/src/assets"
+            ],
+            "styles": [],
+            "scripts": [],
+            "webpackConfig": "@nrwl/react/plugins/webpack",
+            "baseHref": "/tweeter/",
+            "deployUrl": "/tweeter/"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/tweeter/frontend/src/environments/environment.ts",
+                  "with": "apps/tweeter/frontend/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "tweeter-frontend:build",
+            "hmr": true,
+            "proxyConfig": "apps/tweeter/frontend/proxy.conf.json"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "tweeter-frontend:build:production",
+              "hmr": false
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/tweeter/frontend/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/tweeter/frontend"
+          ],
+          "options": {
+            "jestConfig": "apps/tweeter/frontend/jest.config.js",
             "passWithNoTests": true
           }
         }

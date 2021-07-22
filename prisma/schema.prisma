@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model TweeterBookmarks {
+  profile_id      Int
+  tweeter_id      Int
+  tweeter_profile TweeterProfile @relation(fields: [profile_id], references: [id])
+  tweeter_tweet   TweeterTweet   @relation(fields: [tweeter_id], references: [id])
+
+  @@id([profile_id, tweeter_id])
+  @@index([tweeter_id], name: "tweeter_bookmarks_tweeter_tweet_id_fk")
+  @@map(name: "tweeter_bookmarks")
+}
+
+model TweeterComment {
+  id                    Int                     @id @default(autoincrement())
+  text                  String?                 @db.Text
+  image_path            String?                 @db.VarChar(150)
+  tweet_id              Int
+  created_at            DateTime                @default(now()) @db.Timestamp(0)
+  likes                 Int                     @default(0)
+  tweeter_tweet         TweeterTweet           @relation(fields: [tweet_id], references: [id])
+  tweeter_comment_likes TweeterCommentLikes[]
+
+  @@index([tweet_id], name: "table_comment_tweeter_tweet_id_fk")
+  @@map(name: "tweeter_comment")
+}
+
+model TweeterCommentLikes {
+  comment_id      Int
+  profile_id      Int
+  tweeter_comment TweeterComment @relation(fields: [comment_id], references: [id])
+  tweeter_profile TweeterProfile @relation(fields: [profile_id], references: [id])
+
+  @@id([comment_id, profile_id])
+  @@unique([comment_id, profile_id], name: "tweeter_comment_likes_comment_id_profile_id_uindex")
+  @@index([profile_id], name: "tweeter_comment_likes_tweeter_profile_id_fk")
+  @@map(name: "tweeter_comment_likes")
+}
+
+model TweeterFollowers {
+  profile_id                                                     Int
+  follower_id                                                    Int
+  tweeter_profile_tweeter_followers_follower_idTotweeter_profile TweeterProfile @relation("tweeter_followers_follower_idTotweeter_profile", fields: [follower_id], references: [id])
+  tweeter_profile_tweeter_followers_profile_idTotweeter_profile  TweeterProfile @relation("tweeter_followers_profile_idTotweeter_profile", fields: [profile_id], references: [id])
+
+  @@id([profile_id, follower_id])
+  @@unique([profile_id, follower_id], name: "tweeter_followers_profile_id_follower_id_uindex")
+  @@index([follower_id], name: "tweeter_followers_tweeter_profile_id_fk_2")
+  @@map(name: "tweeter_followers")
+}
+
+model TweeterHashtagTweetRelations {
+  hashtag_id       Int
+  tweet_id         Int
+  tweeter_hashtags TweeterHashtags @relation(fields: [hashtag_id], references: [id])
+  tweeter_tweet    TweeterTweet    @relation(fields: [tweet_id], references: [id])
+
+  @@id([hashtag_id, tweet_id])
+  @@unique([hashtag_id, tweet_id], name: "tweeter_hashtag_tweet_relations_hashtag_id_tweet_id_uindex")
+  @@index([tweet_id], name: "tweeter_hashtag_tweet_relations_tweeter_tweet_id_fk")
+  @@map(name: "tweeter_hashtag_tweet_relations")
+}
+
+model TweeterHashtags {
+  id                              Int                               @id @default(autoincrement())
+  name                            String                            @db.VarChar(100)
+  tweeter_hashtag_tweet_relations TweeterHashtagTweetRelations[]
+  @@map(name: "tweeter_hashtags")
+}
+
+model TweeterProfile {
+  id                                                               Int                     @id @default(autoincrement())
+  name                                                             String                  @db.VarChar(50)
+  lastname                                                         String                  @db.VarChar(50)
+  followers                                                        Int                     @default(0)
+  following                                                        Int                     @default(0)
+  bg_path                                                          String?                 @db.VarChar(100)
+  avatar_path                                                      String?                 @db.VarChar(100)
+  tweeter_bookmarks                                                TweeterBookmarks[]
+  tweeter_comment_likes                                            TweeterCommentLikes[]
+  tweeter_followers_tweeter_followers_follower_idTotweeter_profile TweeterFollowers[]     @relation("tweeter_followers_follower_idTotweeter_profile")
+  tweeter_followers_tweeter_followers_profile_idTotweeter_profile  TweeterFollowers[]     @relation("tweeter_followers_profile_idTotweeter_profile")
+  tweeter_retweet                                                  TweeterRetweet[]
+  tweeter_tweet                                                    TweeterTweet[]
+  tweeter_tweet_likes                                              TweeterTweetLikes[]
+  @@map(name: "tweeter_profile")
+}
+
+model TweeterRetweet {
+  profile_id      Int
+  tweet_id        Int
+  tweeter_profile TweeterProfile @relation(fields: [profile_id], references: [id])
+  tweeter_tweet   TweeterTweet   @relation(fields: [tweet_id], references: [id])
+
+  @@id([profile_id, tweet_id])
+  @@unique([profile_id, tweet_id], name: "tweeter_retweet_profile_id_tweet_id_uindex")
+  @@index([tweet_id], name: "tweeter_retweet_tweeter_tweet_id_fk")
+  @@map(name: "tweeter_retweet")
+}
+
+model TweeterTweet {
+  id                              Int                               @id @default(autoincrement())
+  body                            String                            @db.Text
+  profile_id                      Int
+  public                          Boolean                           @default(true)
+  comments                        Int                               @default(0)
+  retweets                        Int                               @default(0)
+  bookmarks                       Int                               @default(0)
+  image_path                      String?                           @db.VarChar(150)
+  created_at                      DateTime                          @default(now()) @db.DateTime(0)
+  updated_at                      DateTime?                         @default(now()) @db.Timestamp(0)
+  tweeter_profile                 TweeterProfile                    @relation(fields: [profile_id], references: [id])
+  tweeter_bookmarks               TweeterBookmarks[]
+  tweeter_comment                 TweeterComment[]
+  tweeter_hashtag_tweet_relations TweeterHashtagTweetRelations[]
+  tweeter_retweet                 TweeterRetweet[]
+  tweeter_tweet_likes             TweeterTweetLikes[]
+
+  @@index([profile_id], name: "tweeter_tweet_tweeter_profile_id_fk")
+  @@map(name: "tweeter_tweet")
+}
+
+model TweeterTweetLikes {
+  profile_id      Int
+  tweet_id        Int
+  tweeter_profile TweeterProfile @relation(fields: [profile_id], references: [id])
+  tweeter_tweet   TweeterTweet   @relation(fields: [tweet_id], references: [id])
+
+  @@id([profile_id, tweet_id])
+  @@unique([profile_id, tweet_id], name: "tweeter_tweet_likes_profile_id_tweet_id_uindex")
+  @@index([tweet_id], name: "tweeter_tweet_likes_tweeter_tweet_id_fk")
+  @@map(name: "tweeter_tweet_likes")
+}
